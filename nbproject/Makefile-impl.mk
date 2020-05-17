@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=AlgoritmosProject_1C_EMPTY_v1.9
+PROJECTNAME=AlgoritmosProject_1C
 
 # Active Configuration
 DEFAULTCONF=Debug

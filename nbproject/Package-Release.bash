@@ -13,9 +13,9 @@ CND_BUILDDIR=build
 CND_DLIB_EXT=so
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/algoritmosproject_1c_empty_v1.9
-OUTPUT_BASENAME=algoritmosproject_1c_empty_v1.9
-PACKAGE_TOP_DIR=algoritmosproject1cemptyv1.9/
+OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/algoritmosproject_1c
+OUTPUT_BASENAME=algoritmosproject_1c
+PACKAGE_TOP_DIR=algoritmosproject1c/
 
 # Functions
 function checkReturnCode
@@ -60,15 +60,15 @@ mkdir -p ${NBTMPDIR}
 
 # Copy files and create directories and links
 cd "${TOP}"
-makeDirectory "${NBTMPDIR}/algoritmosproject1cemptyv1.9/bin"
+makeDirectory "${NBTMPDIR}/algoritmosproject1c/bin"
 copyFileToTmpDir "${OUTPUT_PATH}" "${NBTMPDIR}/${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}" 0755
 
 
 # Generate tar file
 cd "${TOP}"
-rm -f ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/algoritmosproject1cemptyv1.9.tar
+rm -f ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/algoritmosproject1c.tar
 cd ${NBTMPDIR}
-tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/algoritmosproject1cemptyv1.9.tar *
+tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/algoritmosproject1c.tar *
 checkReturnCode
 
 # Cleanup
