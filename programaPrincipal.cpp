@@ -6,7 +6,10 @@
 using namespace std;
 
 int main() {
-    string s = "Esto es una prueba";
-    int p = lastIndexOf(s, 'E');
-    cout << p << endl; // muestra: 5
+    int n = 24689;
+    int i = 1;
+    int r = getDigit(n, i);
+    cout << r << endl; // muestra: 5
+    i = 1;
+
 }

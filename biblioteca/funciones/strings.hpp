@@ -91,11 +91,11 @@ int indexOf(string s, char c, int offSet) // ok
 // o -1 si s no contiene a c
 
 int lastIndexOf(string s, char c) {
-    int tam = length(s)+1;
+    int tam = length(s) + 1;
     while (s[tam] != c) {
-        
+
         tam--;
-        cout << s[tam]<<endl;
+        cout << s[tam] << endl;
     }
     return tam;
 
@@ -104,8 +104,8 @@ int lastIndexOf(string s, char c) {
 // Retorna la posicion de la n-esima ocurrencia de c dentro de s.
 // Por ejemplo: indexOfN("pedro|pablo|juan|rolo",'|',2) retorna 11.
 
-int indexOfN(string s, char c, int n) {
-    
+int indexOfN(string s, char c, int n) {//falta
+
     return 0;
 }
 
@@ -113,24 +113,49 @@ int indexOfN(string s, char c, int n) {
 // Ejemplo: charToInt('4') retorna: 4.
 
 int charToInt(char ch) {
-    // PROGRAMAR AQUI...
-    return 0;
+    cout << ch << " ch" << endl;
+    int num = ch - 48;
+
+    cout << num << "num" << endl;
+    return num;
 }
 
 // Retorna el valor char de i.
 // Ejemplo: intToChar(4) retorna: '4'.
 
 char intToChar(int i) {
-    // PROGRAMAR AQUI...
-    return 'x';
+    char ch = 0;
+    if (i > 9) {
+        ch = i + 48;
+
+    } else {
+        cout << "ingrese un valor de 0 a 9" << endl;
+    }
+
+    return ch;
 }
 
 // retorna el i-esimo digito de n contando desde la derecha
 
-int getDigit(int n, int i) // ok
-{
-    // PROGRAMAR AQUI...
-    return 0;
+int getDigit(int n, int i) {
+    int cifras[5];
+    int num = n;
+    int c = 0;
+    int s = 0;
+    int valor = 45;
+    while (num > 0) {
+        cifras[c] = num % 10;
+        num = num / 10;
+        c++;
+    }
+    
+    for (s = c-1 ; s != i; s--) {
+        //el -1 lo hago xq si no me cuenta desde un posicion mas
+        valor = cifras[s-1];
+
+    }
+
+    return valor;
 }
 
 int digitCount(int i) // ok
