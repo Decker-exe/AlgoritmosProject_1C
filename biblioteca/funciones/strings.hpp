@@ -17,7 +17,6 @@ using namespace std;
 int length(string s) {
     int i;
     for (i = 0; s[i] != '\0'; i++) {
-        cout << s[i];
     }
     return i;
 }
@@ -26,26 +25,22 @@ int length(string s) {
 
 int charCount(string s, char c) {
     int i = 0;
-    int cont = 0;
-    while (s[i] != '\0') {
-        if (s[i] == c) {
-            cont++;
-        }
-        i++;
+    for (i = 0; s[i] != c; i++) {
     }
-    return cont;
-
+    return i;
 }
 
 // Retorna la subcadena de s comprendida entre d (inclusive) y h (no inclusive)
 
-string substring(string s, int d, int h) {//falla
+string substring(string s, int d, int h) {
 
     int i;
     string cadena;
-    for (i = d; s[i] != h; i++) {
+
+    for (i = d; i < h; i++) {
         cadena = cadena + s[i];
     }
+
     return cadena;
 
 }
@@ -53,23 +48,20 @@ string substring(string s, int d, int h) {//falla
 // Retorna la subcadena de s que va desde d (inclusive) hasta el final
 
 string substring(string s, int d) {
-    int i;
-    string cadena;
-    for (i = d; s[i] != '\0'; i++) {
-        cadena = cadena + s[i];
-    }
-    return cadena;
+    return substring(s, d, (length(s)));
 }
 
 // Retorna la posicion de la primer ocurrencia
 // de c dentro s, o -1 si s no contiene a c
 
-int indexOf(string s, char c) // ok
-{
+int indexOf(string s, char c) {
     int i = 0;
-    while (s[i] != c) {
-
+    int lim = length(s);
+    while (s[i] != c && i<lim) {
         i++;
+    }
+    if (i==18){
+        i=-1;
     }
     return i;
 }
@@ -78,8 +70,7 @@ int indexOf(string s, char c) // ok
 // considerando la subcadena de s que va desde offset hasta el final.
 // Ejemplo: indexOf("ALGORITMOS",'O',7) retorna: 1
 
-int indexOf(string s, char c, int offSet) // ok
-{
+int indexOf(string s, char c, int offSet) {
     int i = offSet;
     while (s[i] != c) {
         i++;
@@ -93,9 +84,7 @@ int indexOf(string s, char c, int offSet) // ok
 int lastIndexOf(string s, char c) {
     int tam = length(s) + 1;
     while (s[tam] != c) {
-
         tam--;
-        cout << s[tam] << endl;
     }
     return tam;
 
@@ -113,10 +102,7 @@ int indexOfN(string s, char c, int n) {//falta
 // Ejemplo: charToInt('4') retorna: 4.
 
 int charToInt(char ch) {
-    cout << ch << " ch" << endl;
     int num = ch - 48;
-
-    cout << num << "num" << endl;
     return num;
 }
 
@@ -127,11 +113,9 @@ char intToChar(int i) {
     char ch = 0;
     if (i > 9) {
         ch = i + 48;
-
     } else {
         cout << "ingrese un valor de 0 a 9" << endl;
     }
-
     return ch;
 }
 
@@ -148,68 +132,131 @@ int getDigit(int n, int i) {
         num = num / 10;
         c++;
     }
-    
-    for (s = c-1 ; s != i; s--) {
+    for (s = c - 1; s != i; s--) {
         //el -1 lo hago xq si no me cuenta desde un posicion mas
-        valor = cifras[s-1];
-
+        valor = cifras[s - 1];
     }
-
     return valor;
 }
 
-int digitCount(int i) // ok
-{
-    // PROGRAMAR AQUI...
-    return 0;
+int digitCount(int i) {
+    int cifras[5];
+    int num = i;
+    int c = 0;
+
+    int valor = 45;
+    while (num > 0) {
+        cifras[c] = num % 10;
+        num = num / 10;
+        c++;
+    }
+    valor = c;
+    return valor;
 }
 
 string intToString(int num) // ok
 {
-    // PROGRAMAR AQUI...
-    return "";
+    int cifras[5];
+
+    int c = 0;
+    int s = 0;
+    int valor = 45;
+    char caracter = 0;
+    string cadena = "";
+    while (num > 0) {
+        cifras[c] = num % 10;
+        num = num / 10;
+        c++;
+    }
+
+    for (s = c - 1; s >= 0; s--) {
+        //el -1 lo hago xq si no me cuenta desde un posicion mas
+        cout << "cifras " << cifras[s] << endl;
+        caracter = cifras[s] + 48;
+        cout << "caraceter " << caracter << endl;
+        cadena = cadena + caracter;
+    }
+
+    return cadena;
 }
 
-int stringToInt(string s) // ok
+int stringToInt(string s)//falla
 {
-    // PROGRAMAR AQUI...
-    return 0;
+    int i;
+
+    char aux = 0;
+    int valor = -1;
+    double diez = 0;
+    int resultado = 0;
+    int resultadop = 0;
+
+    for (i = 0; s[i] != '\0'; i++) {
+        cout << "Vuelta" << i << endl;
+
+        aux = s[i];
+
+        cout << aux << "  aux" << endl;
+        valor = valor - 48 + aux;
+
+        cout << valor << "  valor" << endl;
+        diez = pow(10, i);
+
+        cout << diez << "  diez" << endl;
+        resultadop = valor + diez;
+        cout << resultadop << "  resultadop" << endl;
+        resultado = resultado + resultadop;
+
+    }
+
+    return resultado;
 }
 
-int stringToInt(string s, int b) // ok
-{
+int stringToInt(string s, int b) {//falla
     // PROGRAMAR AQUI...
     return 0;
 }
 
 string charToString(char c) {
-    // PROGRAMAR AQUI...
+    string s = "X";
+    s[0] = c;
+    return s;
+}
+
+char stringToChar(string s) {//falla
+    char ret;
+
+
+    return ret;
+}
+
+string doubleToString(double d) {//falla
+
     return "";
 }
 
-char stringToChar(string s) {
-    // PROGRAMAR AQUI...
-    return 'X';
-}
-
-string doubleToString(double d) {
-    // PROGRAMAR AQUI...
-    return "";
-}
-
-double stringToDouble(string s) {
+double stringToDouble(string s) {//falla
     // PROGRAMAR AQUI...
     return 0;
 }
 
 bool isEmpty(string s) {
-    // PROGRAMAR AQUI...
-    return true;
+    bool vacio = false;
+
+    if (s == "") {
+        vacio = true;
+    }
+    return vacio;
 }
 
-bool contains(string s, char c) {
-    // PROGRAMAR AQUI...
-    return true;
+bool contains(string s, char c) {//falla
+    char a = charCount(s, c);
+    a = a + 48;
+    bool bValor = false;
+    if (a == 49) {
+        bValor = true;
+    }
+    return bValor;
+
 }
 
 string replace(string s, char oldChar, char newChar) {
