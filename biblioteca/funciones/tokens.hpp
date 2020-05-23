@@ -10,15 +10,14 @@ using namespace std;
 
 // s = "John|Paul|George|Ringo"
 
-int tokenCount(string s, char sep) // ok
-{
+int tokenCount(string s, char sep) {
+
     return charCount(s, sep) + 1;
 }
 
 // pablo|juan|pedro|carlos
 
-string getTokenAt(string s, char sep, int p) // ok
-{
+string getTokenAt(string s, char sep, int p) {
     return p == 0 ? substring(s, 0, indexOf(s, sep)) : p == tokenCount(s, sep) - 1 ? substring(s, lastIndexOf(s, sep) + 1) : substring(s, indexOfN(s, sep, p) + 1, indexOfN(s, sep, p + 1));
 
 
@@ -35,16 +34,19 @@ string getTokenAt(string s, char sep, int p) // ok
 
 }
 
-void addToken(string& s, char sep, string t) // ok
-{
+void addToken(string& s, char sep, string t) {
+
+    s = s + t;
+    if (length(s) >length(s) - 1) {
+        s+sep;
+    }
+
 }
 
-void removeTokenAt(string& s, char sep, int p) //  ok
-{
+void removeTokenAt(string& s, char sep, int p) {
 }
 
-void setTokenAt(string& s, char sep, string t, int p) // ok
-{
+void setTokenAt(string& s, char sep, string t, int p) {
 }
 
 int findToken(string s, char sep, string t) {
