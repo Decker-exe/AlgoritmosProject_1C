@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
+
 using namespace std;
 
 //0) funciones auxiliares
@@ -17,7 +18,7 @@ double potencia(int b, int p) {
         aux = p;
     }
     for (int i = 1; i <= aux; i++) {
-        j = j*b;
+        j = j * b;
     }
     if (p < 0) {
         j = 1 / j;
@@ -189,7 +190,7 @@ string stringToString(string s) {
 
 string doubleToString(double d) {
     int a = d;
-    int b = (d - a + 0.0000000001)*1000000000;
+    int b = (d - a + 0.0000000001) * 1000000000;
     for (int i = 1; b % 10 == 0; i++) {
         b = b / 10;
     }
@@ -282,7 +283,7 @@ string ltrim(string s) {
 //27)Recorta los espacios en blanco a la derecha de s.
 
 string rtrim(string s) {
-    while (s[ length(s) - 1] == ' ') {
+    while (s[length(s) - 1] == ' ') {
         s = removeAt(s, length(s) - 1);
     }
     return s;
