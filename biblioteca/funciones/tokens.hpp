@@ -93,7 +93,7 @@ void setTokenAt(string &s, char sep, string t, int p) {
 
 int findToken(string s, char sep, string t) {
     //
-    int token = 0;
+    int token = -1;
     for (int i = 0; i < tokenCount(s, sep); i++) {
         if(getTokenAt(s,sep,i)==t){
             token=i;
