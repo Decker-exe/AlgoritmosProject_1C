@@ -21,14 +21,14 @@ int tokenCount(string s, char sep) {
 string getTokenAt(string s, char sep, int p) {
     //igual en addToken ,no uso esta funcion
 
-    return p == 0 ? substring(s, 0, indexOf(s, sep)) : p == tokenCount(s, sep) - 1 ? substring(s,
+ /*   return p == 0 ? substring(s, 0, indexOf(s, sep)) : p == tokenCount(s, sep) - 1 ? substring(s,
                                                                                                lastIndexOf(s, sep) + 1)
                                                                                    : substring(s,
                                                                                                indexOfN(s, sep, p) + 1,
                                                                                                indexOfN(s, sep, p + 1));
+*/
 
 
-    /*
         if (p == 0) {
             return substring(s, 0, indexOf(s, sep));
         } else {
@@ -37,7 +37,7 @@ string getTokenAt(string s, char sep, int p) {
             }
             return substring(s, indexOfN(s, sep, p) + 1, indexOfN(s, sep, p + 1));
         }
-     */
+
 
 }
 
