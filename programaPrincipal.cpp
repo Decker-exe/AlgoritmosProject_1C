@@ -2,10 +2,16 @@
 #include"biblioteca/funciones/tokens.hpp"
 #include "biblioteca/funciones/strings.hpp"
 #include "biblioteca/tads/Coll.hpp"
+#include "biblioteca/funciones/files.hpp"
+#include <stdio.h>
 
 using namespace std;
 
 /*
+ * template<typename T>
+string tToString(T a) {
+    return a;
+}
 struct BigInt {
     string s;
 };
@@ -60,12 +66,95 @@ Matriz matrizCreate(string x, int n, int m) {
 
 }
 */
+struct Elemento {
+    string subR;
+    string pos;
+};
+
 template<typename T>
-string tToString(T a) {
-    return a;
+void mostrarFile(FILE *arc) {
+    T a = read<T>(arc);
+    while (!feof(arc)) {
+        cout << a << endl;
+        a = read<T>(arc);
+
+    }
+}
+
+template<typename T>
+void grabarFile(FILE *arc, T sep) {
+    T reg;
+    cout << "Ingrese registro: " << endl;
+    cin >> reg;
+    while (reg != sep) {
+        write<T>(arc, reg);
+        cout << "Ingrese registro: " << endl;
+        cin >> reg;
+    }
+}
+
+int cmp1(string a,string b){
+    return stringToInt(a)-stringToInt(b);
+}
+template<typename T>
+void mayor(FILE *arc, Elemento mayor) {
+    mayor.pos="";
+    mayor.subR="";
+    string aux = "";
+    T reg;
+    T sep=',';
+    for (int i = 0; i < fileSize<T>(arc); i++) {
+        seek<T>(arc, i);
+        reg = read<T>(arc);
+        if (i== fileSize<T>(arc)-1 ){
+            aux=aux+reg;
+        }
+        if (reg!=sep && i!=fileSize<T>(arc)-1 ){
+            aux=aux+reg;
+        } else{
+           if(i-length(aux)==0){
+               mayor.subR=aux;
+           }
+           if (cmp1(aux,mayor.subR)>=0){
+               if(mayor.subR!=aux){
+                   mayor.pos="";
+               }
+               mayor.subR=aux;
+               addToken(mayor.pos,sep,intToString(i-1));
+           }
+            aux="";
+        }
+    }
+    cout<<"mayor :  "<< mayor.subR<<endl;
+    cout<<"may pos  "<<mayor.pos<<endl;
 }
 
 int main() {
+
+    FILE *arc = fopen("Ej2.xx", "r+b");
+    mostrarFile<char>(arc);
+    Elemento may;
+    mayor<char>(arc, may);
+    fclose(arc);
+
+
+    /*
+    //FILE *arc = fopen("archivo.xx", "w+b");
+    //grabarFile<int>(arc,123);
+    //fclose(arc);
+    FILE *arc2 = fopen("archivo.xx", "r+b");
+    mostrarFile<int>(arc2);
+    cout<<read<int>(arc2)<<endl;
+    cout<<"FilePos antes 0: "<<filePos<int>(arc2)<<endl;
+    seek<int>(arc2,0);
+    cout<<"FilePos despues 0 :"<<filePos<int>(arc2)<<endl;
+    cout<<"nuevo : "<<read<int>(arc2)<<endl;
+    cout<<"FilePos 2"<<filePos<int>(arc2)<<endl;
+    seek<int>(arc2,2);
+    cout<<"nuevo 2 : "<<read<int>(arc2)<<endl;
+    cout<<fileSize<int>(arc2)<<endl;
+    fclose(arc2);
+*/
     /*
      * --EJ1----
     cout << "Ingresa un string" << endl;
@@ -111,6 +200,7 @@ int main() {
     cout << r.s << endl;
     cout << z.s << endl;
 */
+    /*
     Coll<int> x = collCreate<int>();
     collAdd<int>(x, 1, intToString);
     collAdd<int>(x, 2, intToString);
@@ -122,5 +212,5 @@ int main() {
     cout << getTokenAt(x.s, x.sep, 0) << endl;
     cout << getTokenAt(x.s, x.sep, 1) << endl;
     cout << getTokenAt(x.s, x.sep, 2) << endl;
-
+*/
 }
