@@ -1,6 +1,9 @@
 #include <iostream>
+#include <sstream>
 #include <string>
+#include <string.h>
 #include <stdlib.h>
+
 #include "biblioteca/funciones/strings.hpp"
 #include "biblioteca/funciones/tokens.hpp"
 #include "biblioteca/funciones/files.hpp"
@@ -35,80 +38,153 @@ struct REstadio
     int emp;
 };
 
+string equipoToString(Equipo x)
+{
+    char sep = 2;
+    string sIdEq=to_string(x.idEq);
+    string sNombre=x.nombre;
+    string sPuntos=to_string(x.puntos);
+    return  sIdEq+sep+sNombre+sep+sPuntos;
+}
+string requipoToString(REquipo x)
+{
+    char sep = 3;
+    string sEq=equipoToString(x.eq);
+    string sPtos=to_string(x.ptos);
+    return sEq+sep+sPtos;
+}
 
+Equipo equipoFromString(string s)
+{
+    char sep = 2;
+    Equipo x;
+    string t0 = getTokenAt(s,sep,0);
+    x.idEq=stringToInt(t0);
+    string t1 = getTokenAt(s,sep,1);
+    strcpy(x.nombre,t1.c_str());
+    string t2 = getTokenAt(s,sep,2);
+    x.puntos=stringToInt(t2);
+    return x;
+}
+
+REquipo requipoFromString(string s){
+
+        char sep = 3;
+        REquipo x;
+        string t0 = getTokenAt(s,sep,0);
+        x.eq=equipoFromString(t0);
+        string t1 = getTokenAt(s,sep,1);
+        x.ptos=stringToInt(t1);
+        return x;
+}
 Coll<REquipo> subirEquipos()
 {
     Coll<REquipo> x;
+    FILE* f = fopen("EQUIPOS.dat","r+b");
+
+    Equipo e = read<Equipo>(f);
+    while( !feof(f) )
+    {
+        REquipo re = { e, 0 };
+        collAdd<REquipo>(x,re,requipoToString);
+        e = read<Equipo>(f);
+    }
     return x;
 }
 
-REquipo buscarEquipo(Coll<REquipo> c,int id)
+int cmpREquipoId(REquipo e, int id)
 {
-    REquipo x;
+    return e.eq.idEq-id;
+}
+
+
+
+
+REquipo buscarEquipo(Coll<REquipo> c, int id)
+{
+    int pos = collFind<REquipo, int>(c,id,cmpREquipoId,requipoFromString);
+    REquipo x = collGetAt<REquipo>(c,pos,requipoFromString);
+
     return x;
 }
 
-REquipo requipoFromString(string s)
-{
-    REquipo x;
-    return x;
-}
 
-int cmpREquipoId(REquipo e,int id)
-{
-    return 0;
-}
 
-string requipoToString(REquipo x)
+void actualizarPuntos(Coll<REquipo>& c, int id, int ptos)
 {
-    return "";
-}
-
-void actualizarPuntos(Coll<REquipo>& c,int id,int ptos)
-{
-    int pos = collFind<REquipo,int>(c,id,cmpREquipoId,requipoFromString);
+    int pos = collFind<REquipo, int>(c,id,cmpREquipoId,requipoFromString);
     REquipo re = collGetAt<REquipo>(c,pos,requipoFromString);
-    re.ptos+=ptos;
+    re.ptos += ptos;
     collSetAt<REquipo>(c,re,pos,requipoToString);
 }
 
 REstadio restadioFromString(string s)
 {
     REstadio x;
+    x.emp = stringToInt(getTokenAt(s,',',0));
+    x.est = getTokenAt(s,',',1);
+    x.jug = stringToInt(getTokenAt(s,',',3));
     return x;
 }
 
-int cmpREstadioEst(REstadio e,string est)
+int cmpREstadioEst(REstadio e, string est)
 {
-    return 0;
+
+    return e.est==est?0:-1;
 }
 
 string restadioToString(REstadio e)
 {
-    return "";
+    string jugados = intToString(e.jug);
+    string empatados = intToString(e.emp);
+    string estadio = e.est;
+
+    return jugados+", "+estadio+", "+empatados;
 }
 
-void actualizarEstadio(Coll<REstadio>& c,string est,int empate)
+void actualizarEstadio(Coll<REstadio>& c, string est, int empate)
 {
-    int pos = collFind<REstadio,string>(c,est,cmpREstadioEst,restadioFromString);
+    int pos = collFind<REstadio, string>(c,est,cmpREstadioEst,
+                                         restadioFromString);
 
     if( pos<0 )
     {
-        REstadio x = {est,0,0};
+        REstadio x = { est, 0, 0 };
         pos = collAdd<REstadio>(c,x,restadioToString);
     }
 
     REstadio re = collGetAt<REstadio>(c,pos,restadioFromString);
     re.jug++;
-    re.emp+=empate;
+    re.emp += empate;
     collSetAt<REstadio>(c,re,pos,restadioToString);
 }
 
-int cmpREquipo(REquipo a,REquipo b)
+int cmpREquipo(REquipo a, REquipo b)
 {
-    return b.ptos-a.ptos;
+    return (b.eq.puntos+b.ptos)-(a.eq.puntos+a.ptos);
 }
-
+string equipoToDebug(Equipo x)
+{
+    stringstream sout;
+    sout<< "[";
+    sout << x.idEq;
+    sout << ",";
+    sout << x.nombre;
+    sout << ",";
+    sout << x.puntos;
+    sout<< "]";
+    return sout.str();
+}
+string rEquipoToDebug(REquipo x)
+{
+    stringstream sout;
+    sout<< "[";
+    sout << equipoToDebug(x.eq);
+    sout << ",";
+    sout << x.ptos;
+    sout<< "]";
+    return sout.str();
+}
 void punto1(Coll<REquipo> c)
 {
     collSort<REquipo>(c,cmpREquipo,requipoFromString,requipoToString);
@@ -116,12 +192,28 @@ void punto1(Coll<REquipo> c)
     while( collHasNext<REquipo>(c) )
     {
         REquipo x = collNext<REquipo>(c,requipoFromString);
-        cout << requipoToString(x) << endl;
+        cout<<rEquipoToDebug(x)<<endl;
     }
 }
-
+string rEstadioToDebug(REstadio x)
+{
+    stringstream sout;
+    sout<< "[";
+    sout << x.est;
+    sout << ",";
+    sout << x.jug;
+    sout << ",";
+    sout << x.emp;
+    sout<< "]";
+    return sout.str();
+}
 void punto2(Coll<REstadio> c)
 {
+    while(collHasNext<REstadio>(c))
+    {
+        REstadio e = collNext<REstadio>(c,restadioFromString);
+        cout << rEstadioToDebug(e)<< endl;
+    }
 }
 
 void punto3(Coll<REquipo> c)
@@ -131,8 +223,8 @@ void punto3(Coll<REquipo> c)
     collReset<REquipo>(c);
     while( collHasNext<REquipo>(c) )
     {
-        REquipo x  = collNext(c,requipoFromString);
-        x.eq.puntos+=x.ptos;
+        REquipo x = collNext(c,requipoFromString);
+        x.eq.puntos += x.ptos;
         write<Equipo>(f,x.eq);
     }
 
@@ -141,6 +233,7 @@ void punto3(Coll<REquipo> c)
 
 int main()
 {
+    int i=0;
     // subo consultas a memoria
     Coll<REquipo> cEq = subirEquipos();
 
@@ -151,7 +244,7 @@ int main()
     FILE* f = fopen("RESULTADOS.dat","r+b");
 
     Resultado r = read<Resultado>(f);
-    while( !feof(f) )
+    while( !feof(f) || i<5 )
     {
         // equipos que jugaron
         REquipo e1 = buscarEquipo(cEq,r.idEq1);
@@ -170,6 +263,7 @@ int main()
         actualizarEstadio(cEst,est,empate);
 
         r = read<Resultado>(f);
+        i++;
     }
 
     // tabla de posiciones

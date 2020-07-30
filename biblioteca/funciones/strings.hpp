@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
-
+#include<strings.h> //Hay q incluir esta biblioteca en la de trat. de cadenas.
 //stringxxx
 using namespace std;
 
@@ -69,21 +69,16 @@ int lastIndexOf(string s, char c) {
 }
 
 // 8)Retorna la posicion de la n-esima ocurrencia de c dentro de s. Por ejemplo: indexOfN ("pedro|pablo|juan|rolo",'|',2) retorna 11.
-int indexOfN(string s, char c, int n) {
-//   int j=1, aux;
-//   for(int i=0; i<length(s);i++)
-//   {  if( s[i]==c and j<=n)
-//      {j++;
-//       aux=i;
-//      }
-//   }
-//      return aux;
-    int i, aux = 0;
-    for (i = 0; aux < n; i++) {
-        if (s[i] == c) { aux++; }
+int indexOfN(string s, char c, int n)
+{
+    int offset = 0;
+    int x = -1;
+    for( int i = 0; i<n; i++ )
+    {
+        x = indexOf(s,c,offset);
+        offset += x+1;
     }
-    return i - 1;
-
+    return offset-1;
 }
 
 //9) Retorna el valor numerico de ch. Ejemplo: charToInt('4') retorna: 4.
@@ -154,12 +149,18 @@ string charToString(char c) {
     return s = c;
 }
 
-//17)
-char stringToChar(string s) {
-    char c;
-    return c = s[0];
-}
 
+
+//17)
+char stringToChar(string s)
+{  char c;
+    return c=s[0];
+}
+//17.2)
+void stringToCharArray(string s, char array[])
+{
+    strcpy(array,s.c_str());//pasaje de string (xej:con el nom del Archivo) a char array.
+}
 //18)
 string stringToString(string s) {
     return s;
