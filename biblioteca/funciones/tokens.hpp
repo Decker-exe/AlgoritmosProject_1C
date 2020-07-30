@@ -7,103 +7,52 @@
 
 using namespace std;
 
-// --[Funciones Token]--
-
-// s = "John|Paul|George|Ringo"
-
+// 1) Cuenta la cantidad tokens que el separador sep genera en s.
 int tokenCount(string s, char sep) {
-
-    return charCount(s, sep) + 1;
+    int i = charCount(s, sep);
+    return s == "" ? 0 : i + 1;
 }
 
-// pablo|juan|pedro|carlos
-
-string getTokenAt(string s, char sep, int p) {
-    //igual en addToken ,no uso esta funcion
-
- /*   return p == 0 ? substring(s, 0, indexOf(s, sep)) : p == tokenCount(s, sep) - 1 ? substring(s,
-                                                                                               lastIndexOf(s, sep) + 1)
-                                                                                   : substring(s,
-                                                                                               indexOfN(s, sep, p) + 1,
-                                                                                               indexOfN(s, sep, p + 1));
-*/
-
-
-        if (p == 0) {
-            return substring(s, 0, indexOf(s, sep));
-        } else {
-            if (p == tokenCount(s, sep)-1) {
-                return substring(s, lastIndexOf(s, sep) + 1);
-            }
-            return substring(s, indexOfN(s, sep, p) + 1, indexOfN(s, sep, p + 1));
-        }
-
-
+// 2) Retorna el i-ésimo token de la cadena tokenizada s.
+string getTokenAt(string s, char sep, int i) {
+    return i == 0 ? substring(s, 0, indexOf(s, sep)) : i == charCount(s, sep) ? substring(s, indexOfN(s, sep, i) + 1)
+                                                                              : substring(s, indexOfN(s, sep, i) + 1,
+                                                                                          indexOfN(s, sep, i + 1));
 }
 
-void addToken(string &s, char sep, string t) {
-    if (isEmpty(s)) {
-        s = t;
-    } else {
-        s = s + sep + t;
-    }
+// 3) Agrega el token t al final de la cadena s.
+void addToken(string &s, char sep, string t) { s = (s == "" ? t : s + sep + t); }
+
+// 4) Remueve de s el token ubicado en la posicion i.
+void removeTokenAt(string &s, char sep, int i) {
+    s = (i == 0 ? substring(s, indexOf(s, sep) + 1) : i == charCount(s, sep) ? substring(s, 0, indexOfN(s, sep, i)) :
+                                                      substring(s, 0, indexOfN(s, sep, i)) +
+                                                      substring(s, indexOfN(s, sep, i + 1)));
 }
 
-void removeTokenAt(string &s, char sep, int p) {
-    //a que hora volvemos?
-
-    if (p == 0) {//inicio
-        s = substring(s, indexOf(s, sep) + 1);
-    } else {
-        if (p == tokenCount(s, sep) - 1) {//final
-            s = substring(s, 0, lastIndexOf(s, sep));
-        } else {//medio
-            //donde?
-            s = substring(s, 0, indexOfN(s, sep, p)) + substring(s, indexOfN(s, sep, p + 1));
-            //s = substring(s, indexOfN(s, sep, p) + 1, indexOfN(s, sep, p + 1));
-        }
-
-
-    }
-
-
-}
-
-void setTokenAt(string &s, char sep, string t, int p) {
-    //
-
-    if (p == 0) {//inicio
-
-        removeTokenAt(s, sep, p);
+// 5) Reemplaza por t el token de s ubicado en la posición i.
+void setTokenAt(string &s, char sep, string t, int i) {
+    if (i == 0) {
+        removeTokenAt(s, sep, i);
         s = t + sep + s;
-
     } else {
-        if (p == tokenCount(s, sep) - 1) {//final
-            removeTokenAt(s, sep, p);
-            addToken(s, sep, t);
+        if (i == charCount(s, sep)) {
+            removeTokenAt(s, sep, i);
+            s = s + sep + t;
         } else {
-
-            s = substring(s, 0, indexOfN(s, sep, p)) + sep + t + substring(s, indexOfN(s, sep, p + 1));
+            s = substring(s, 0, indexOfN(s, sep, i)) + sep + t + substring(s, indexOfN(s, sep, i + 1));
         }
-
     }
-
 
 }
 
+// 6) Determinar la posición que el token t ocupa dentro de la cadena s,o un valor negativo si s no contiene a t.
 int findToken(string s, char sep, string t) {
-    //
-    int token = -1;
     for (int i = 0; i < tokenCount(s, sep); i++) {
-        if(getTokenAt(s,sep,i)==t){
-            token=i;
-        }
+        if (getTokenAt(s, sep, i) == t) { return i; }
     }
-    return token;
+    return -1;
 }
-
-// --[/Funciones Token]--
-
 
 
 #endif

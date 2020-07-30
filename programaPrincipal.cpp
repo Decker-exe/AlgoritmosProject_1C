@@ -1,216 +1,186 @@
 #include <iostream>
-#include"biblioteca/funciones/tokens.hpp"
+#include <string>
+#include <stdlib.h>
 #include "biblioteca/funciones/strings.hpp"
-#include "biblioteca/tads/Coll.hpp"
+#include "biblioteca/funciones/tokens.hpp"
 #include "biblioteca/funciones/files.hpp"
-#include <stdio.h>
-
+#include "biblioteca/tads/Coll.hpp"
 using namespace std;
 
-/*
- * template<typename T>
-string tToString(T a) {
-    return a;
-}
-struct BigInt {
-    string s;
+struct Resultado
+{
+    int idEq1;
+    int idEq2;
+    int codRes;
+    char estadio[20];
 };
 
-BigInt bigIntCreate(string n) {
-    BigInt v = {n};
-    //v.s = n;
-    return v;
-}
-
-BigInt bigIntSumar(BigInt a, BigInt b) {
-    int r;
-    BigInt valor;
-    r = stringToInt(a.s) + stringToInt(b.s);
-    valor.s = intToString(r);
-    return valor;
-}
-
-BigInt bigIntRestar(BigInt a, BigInt b) {
-    int r;
-    BigInt valor;
-    r = stringToInt(a.s) - stringToInt(b.s);
-    valor.s = intToString(r);
-    return valor;
-}
-
-struct Matriz {
-    string s;
-    int filas;
-    int columnas;
+struct Equipo
+{
+    int idEq;
+    char nombre[20];
+    int puntos;
 };
 
-Matriz matrizCreate(int n, int m) {
-    Matriz mat;
-    mat.columnas = m;
-    mat.filas = n;
-    return mat;
-}
-
-Matriz matrizCreate(string x, int n, int m) {
-
-    int mat[n][m];
-    int aux = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            for (int i = 0; x[i] != '\0'; i++) {
-                aux = x[i];
-                mat[i][j] = aux;
-            }
-        }
-    }
-
-}
-*/
-struct Elemento {
-    string subR;
-    string pos;
+struct REquipo
+{
+    Equipo eq;
+    int ptos;
 };
 
-template<typename T>
-void mostrarFile(FILE *arc) {
-    T a = read<T>(arc);
-    while (!feof(arc)) {
-        cout << a << endl;
-        a = read<T>(arc);
+struct REstadio
+{
+    string est;
+    int jug;
+    int emp;
+};
 
+
+Coll<REquipo> subirEquipos()
+{
+    Coll<REquipo> x;
+    return x;
+}
+
+REquipo buscarEquipo(Coll<REquipo> c,int id)
+{
+    REquipo x;
+    return x;
+}
+
+REquipo requipoFromString(string s)
+{
+    REquipo x;
+    return x;
+}
+
+int cmpREquipoId(REquipo e,int id)
+{
+    return 0;
+}
+
+string requipoToString(REquipo x)
+{
+    return "";
+}
+
+void actualizarPuntos(Coll<REquipo>& c,int id,int ptos)
+{
+    int pos = collFind<REquipo,int>(c,id,cmpREquipoId,requipoFromString);
+    REquipo re = collGetAt<REquipo>(c,pos,requipoFromString);
+    re.ptos+=ptos;
+    collSetAt<REquipo>(c,re,pos,requipoToString);
+}
+
+REstadio restadioFromString(string s)
+{
+    REstadio x;
+    return x;
+}
+
+int cmpREstadioEst(REstadio e,string est)
+{
+    return 0;
+}
+
+string restadioToString(REstadio e)
+{
+    return "";
+}
+
+void actualizarEstadio(Coll<REstadio>& c,string est,int empate)
+{
+    int pos = collFind<REstadio,string>(c,est,cmpREstadioEst,restadioFromString);
+
+    if( pos<0 )
+    {
+        REstadio x = {est,0,0};
+        pos = collAdd<REstadio>(c,x,restadioToString);
+    }
+
+    REstadio re = collGetAt<REstadio>(c,pos,restadioFromString);
+    re.jug++;
+    re.emp+=empate;
+    collSetAt<REstadio>(c,re,pos,restadioToString);
+}
+
+int cmpREquipo(REquipo a,REquipo b)
+{
+    return b.ptos-a.ptos;
+}
+
+void punto1(Coll<REquipo> c)
+{
+    collSort<REquipo>(c,cmpREquipo,requipoFromString,requipoToString);
+    collReset<REquipo>(c);
+    while( collHasNext<REquipo>(c) )
+    {
+        REquipo x = collNext<REquipo>(c,requipoFromString);
+        cout << requipoToString(x) << endl;
     }
 }
 
-template<typename T>
-void grabarFile(FILE *arc, T sep) {
-    T reg;
-    cout << "Ingrese registro: " << endl;
-    cin >> reg;
-    while (reg != sep) {
-        write<T>(arc, reg);
-        cout << "Ingrese registro: " << endl;
-        cin >> reg;
-    }
+void punto2(Coll<REstadio> c)
+{
 }
 
-int cmp1(string a,string b){
-    return stringToInt(a)-stringToInt(b);
-}
-template<typename T>
-void mayor(FILE *arc, Elemento mayor) {
-    mayor.pos="";
-    mayor.subR="";
-    string aux = "";
-    T reg;
-    T sep=',';
-    for (int i = 0; i < fileSize<T>(arc); i++) {
-        seek<T>(arc, i);
-        reg = read<T>(arc);
-        if (i== fileSize<T>(arc)-1 ){
-            aux=aux+reg;
-        }
-        if (reg!=sep && i!=fileSize<T>(arc)-1 ){
-            aux=aux+reg;
-        } else{
-           if(i-length(aux)==0){
-               mayor.subR=aux;
-           }
-           if (cmp1(aux,mayor.subR)>=0){
-               if(mayor.subR!=aux){
-                   mayor.pos="";
-               }
-               mayor.subR=aux;
-               addToken(mayor.pos,sep,intToString(i-1));
-           }
-            aux="";
-        }
+void punto3(Coll<REquipo> c)
+{
+    FILE* f = fopen("EQUIPOS.dat","r+b");
+
+    collReset<REquipo>(c);
+    while( collHasNext<REquipo>(c) )
+    {
+        REquipo x  = collNext(c,requipoFromString);
+        x.eq.puntos+=x.ptos;
+        write<Equipo>(f,x.eq);
     }
-    cout<<"mayor :  "<< mayor.subR<<endl;
-    cout<<"may pos  "<<mayor.pos<<endl;
+
+    fclose(f);
 }
 
-int main() {
+int main()
+{
+    // subo consultas a memoria
+    Coll<REquipo> cEq = subirEquipos();
 
-    FILE *arc = fopen("Ej2.xx", "r+b");
-    mostrarFile<char>(arc);
-    Elemento may;
-    mayor<char>(arc, may);
-    fclose(arc);
+    // subo consultas a memoria
+    Coll<REstadio> cEst = collCreate<REstadio>();
 
+    // barro novedades
+    FILE* f = fopen("RESULTADOS.dat","r+b");
 
-    /*
-    //FILE *arc = fopen("archivo.xx", "w+b");
-    //grabarFile<int>(arc,123);
-    //fclose(arc);
-    FILE *arc2 = fopen("archivo.xx", "r+b");
-    mostrarFile<int>(arc2);
-    cout<<read<int>(arc2)<<endl;
-    cout<<"FilePos antes 0: "<<filePos<int>(arc2)<<endl;
-    seek<int>(arc2,0);
-    cout<<"FilePos despues 0 :"<<filePos<int>(arc2)<<endl;
-    cout<<"nuevo : "<<read<int>(arc2)<<endl;
-    cout<<"FilePos 2"<<filePos<int>(arc2)<<endl;
-    seek<int>(arc2,2);
-    cout<<"nuevo 2 : "<<read<int>(arc2)<<endl;
-    cout<<fileSize<int>(arc2)<<endl;
-    fclose(arc2);
-*/
-    /*
-     * --EJ1----
-    cout << "Ingresa un string" << endl;
-    string s = "Z";
-    cin >> s;
-    int valor = 0;
-    string aux = "";
-    int auxi = 0;
+    Resultado r = read<Resultado>(f);
+    while( !feof(f) )
+    {
+        // equipos que jugaron
+        REquipo e1 = buscarEquipo(cEq,r.idEq1);
+        REquipo e2 = buscarEquipo(cEq,r.idEq2);
 
-    for (int i = 0; s[i] != '\0'; i++) {
-        aux = s[i];
-        valor = valor + stringToChar(aux) - '@';
-    }
-    cout << valor << " valor " << endl;
+        int ptos1 = r.codRes<0?3:r.codRes==0?1:0;
+        int ptos2 = r.codRes>0?3:r.codRes==0?1:0;
 
-    for (int i = digitCount(valor); i > 0; i--) {
-        auxi = auxi + getDigit(valor, i);
-    }
-    cout << auxi << " auxi " << endl;
-     */
-    /*
-     --EJ2----
-    string s = "Pedro,2-oct-1970,Argentino|Juan,9-dic-1985,Chileno|Pablo,14-ene-1992,Argentino";
-    char sep = '|';
-    char sep2 = ',';
-    int j = 0;
-    for (int i = 0; i < tokenCount(s, sep); i++) {
-        cout << "nombre: " << getTokenAt(getTokenAt(s, sep, j), sep2, 0) << endl;
-        cout << "Fecha de Nacimiento: " << getTokenAt(getTokenAt(s, sep, j), sep2, 1) << endl;
-        cout << "Nacionalidad: " << getTokenAt(getTokenAt(s, sep, j), sep2, 2) << endl;
-        cout << "-----------------------------------" << endl;
-        j++;
+        // resuelvo punto 1 y 3
+        actualizarPuntos(cEq,r.idEq1,ptos1);
+        actualizarPuntos(cEq,r.idEq2,ptos2);
+
+        // resuelvo punto 2
+        string est = r.estadio;
+        int empate = r.codRes==0?1:0;
+        actualizarEstadio(cEst,est,empate);
+
+        r = read<Resultado>(f);
     }
 
- */
-    /*
-     ---EJ3---
-    string s = "15";
-    BigInt a =bigIntCreate(s);
-    BigInt b =bigIntCreate(s);
-    BigInt r= bigIntRestar(a,b);
-    BigInt z= bigIntSumar(a,b);
-    cout << r.s << endl;
-    cout << z.s << endl;
-*/
-    /*
-    Coll<int> x = collCreate<int>();
-    collAdd<int>(x, 1, intToString);
-    collAdd<int>(x, 2, intToString);
-    collAdd<int>(x, 3, intToString);
-    cout << getTokenAt(x.s, x.sep, 0) << endl;
-    cout << getTokenAt(x.s, x.sep, 1) << endl;
-    cout << getTokenAt(x.s, x.sep, 2) << endl;
-    collSetAt<int>(x, 9, 1, intToString);
-    cout << getTokenAt(x.s, x.sep, 0) << endl;
-    cout << getTokenAt(x.s, x.sep, 1) << endl;
-    cout << getTokenAt(x.s, x.sep, 2) << endl;
-*/
+    // tabla de posiciones
+    punto1(cEq);
+
+    // estadisticas x estadio
+    punto2(cEst);
+
+    // actualizar puntos
+    punto3(cEq);
+
+    fclose(f);
+    return 0;
 }
