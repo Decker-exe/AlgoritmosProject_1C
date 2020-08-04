@@ -86,10 +86,7 @@ void collSetAt(Coll<T> &c, T t, int p, string tToString(T)) {
 
 //2.12) Retorna el elemento que se ubica en la posicion p de la coleccion c.
 template<typename T>
-T collGetAt(
-        Coll<T> c,
-        int p,
-        T tFromString(string)) {
+T collGetAt(Coll<T> c, int p,T tFromString(string)) {
     T x = tFromString(
             getTokenAt(c.s, c.sep, p));
 
@@ -133,6 +130,38 @@ void collSort(Coll<T> &c, int cmpTT(T, T), T tFromString(string), string tToStri
             }
         }
     }
+}
+//Pruebas
+template<typename T>
+string collNextString (Coll<T>& c){
+
+    string x;
+
+    x= getTokenAt(c.s, c.sep, c.pos++);
+
+    return x;
+}
+template<typename T>
+void collMostrar(Coll<T> c){
+
+    int i=0;
+    string reg;
+
+    cout<<"----------"<<endl;
+    cout<<" tokens:"<<endl;
+
+    collReset<T>(c);
+
+    while(collHasNext<T>(c)){
+
+        reg=collNextString<T>(c);
+
+        cout<<i<<">"<<reg<<endl;
+
+        i++;
+    }
+
+    cout<<"---------"<<endl;
 }
 
 #endif
