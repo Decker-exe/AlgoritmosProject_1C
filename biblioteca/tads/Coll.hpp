@@ -134,5 +134,37 @@ void collSort(Coll<T> &c, int cmpTT(T, T), T tFromString(string), string tToStri
         }
     }
 }
+template<typename T>
+string collNextString (Coll<T>& c){
+
+    string x;
+
+    x= getTokenAt(c.s, c.sep, c.pos++);
+
+    return x;
+}
+template<typename T>
+void collMostrar(Coll<T> c){
+
+    int i=0;
+    string reg;
+
+    cout<<"----------"<<endl;
+    cout<<" tokens:"<<endl;
+
+    collReset<T>(c);
+
+    while(collHasNext<T>(c)){
+
+        reg=collNextString<T>(c);
+
+        cout<<i<<">"<<reg<<endl;
+
+        i++;
+    }
+
+    cout<<"---------"<<endl;
+}
+
 
 #endif
